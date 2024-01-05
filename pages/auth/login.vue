@@ -1,15 +1,3 @@
-<script setup>
-useHead({
-  title: "Login",
-  meta: [
-    {
-      name: "description",
-      content: "Login to your account",
-    },
-  ],
-});
-</script>
-
 <template>
   <div class="flex md:flex-row flex-col w-screen h-screen overflow-hidden">
     <div
@@ -35,13 +23,14 @@ useHead({
         <!-- Login Form -->
         <form action="" class="w-full">
           <div class="mb-4">
-            <label for="email" class="block text-gray-700 font-bold mb-2"
-              >Email</label
+            <label for="username" class="block text-gray-700 font-bold mb-2"
+              >Username</label
             >
             <input
-              type="email"
-              id="email"
+              type="username"
+              id="username"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white text-black"
+              v-model="username"
             />
           </div>
           <div class="mb-4">
@@ -52,17 +41,19 @@ useHead({
               type="password"
               id="password"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 bg-white text-black"
+              v-model="password"
             />
           </div>
           <div>
-            <NuxtLink to="/dashboard/home">
-              <button
-                type="submit"
-                class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:bg-blue-600 active:scale-95"
-              >
-                Login
-              </button>
-            </NuxtLink>
+            <!-- <NuxtLink to="/dashboard/home"> -->
+            <button
+              type="submit"
+              class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:bg-blue-600 active:scale-95"
+              @click.prevent="handlerLogin"
+            >
+              Login
+            </button>
+            <!-- </NuxtLink> -->
           </div>
         </form>
 
@@ -79,6 +70,55 @@ useHead({
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRoute } from "vue-router";
+
+useHead({
+  title: "Login",
+  meta: [
+    {
+      name: "description",
+      content: "Login to your account",
+    },
+  ],
+});
+
+const config = useRuntimeConfig();
+let username = ref("");
+let password = ref("");
+let token = useCookie("token");
+
+const router = useRouter();
+
+const handlerLogin = async () => {
+  try {
+    const res = await fetch(`${config.public.apiURL}/auth/login/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value,
+      }),
+    });
+
+    const resData = await res.json();
+
+    if (resData.status !== 200) {
+      alert(`Login Failed, ${resData.msg}`);
+    } else {
+      alert(`Login Success, Welcome ${resData.data.username}`);
+      token.value = resData.data.token;
+      router.push("/dashboard/home");
+    }
+  } catch (error) {
+    console.log(error);
+    alert("Login Failed");
+  }
+};
+</script>
 
 <style>
 /* Add any custom styles here */

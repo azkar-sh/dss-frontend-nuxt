@@ -6,14 +6,16 @@
       <SideBar @minimizeSidebar="handleSidebarToggle" />
     </div>
     <div
-      :class="`rounded-md bg-orange-50 h-full flex flex-col overflow-x-hidden  md:p-6 p-2 w-full`"
+      :class="`rounded-md bg-orange-50 h-full flex flex-col overflow-x-hidden md:p-6 p-2 w-full `"
     >
       <div class="flex gap-3 items-center text-2xl font-semibold uppercase">
         <Icon :icon="routeIcon()" class="md:w-6 md:h-6 w-4 h-4" />
         {{ routeName }}
       </div>
       <div class="border-b border-black my-3"></div>
-      <slot />
+      <div class="animate__animated animate__fadeIn">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
