@@ -1,9 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  head: {
-    title: "My Awesome Nuxt Application",
-  },
-
   devtools: { enabled: true },
   css: ["~/assets/css/main.css", "animate.css/animate.min.css"],
 
@@ -14,5 +10,11 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxt/image"]
+  modules: ["@nuxt/image"],
+
+  runtimeConfig: {
+    public: {
+      apiURL: process.env.NUXT_API_URL,
+    },
+  },
 });

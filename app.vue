@@ -10,9 +10,9 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-onMounted(() => {
-  router.push("/auth/login");
-});
+// onMounted(() => {
+//   router.push("/auth/login");
+// });
 </script>
 
 <template>

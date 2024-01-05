@@ -1,34 +1,42 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-screen">
-    <h1 class="text-4xl font-bold mb-4">Welcome to the Home Page</h1>
-    <p class="text-lg text-gray-600 mb-8">Enjoy your stay!</p>
-    <button
-      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-    >
-      Get Started
-    </button>
-  </div>
+  <NuxtLayout name="dashboard">
+    <div class="bg-white rounded-md md:p-4 p-1 w-full">
+      <span class="font-semibold">Analysis Subject List</span>
+    </div>
+  </NuxtLayout>
 </template>
 
-<script>
-export default {
-  name: "HomePage",
+<script setup>
+useHead({
+  title: "Dashboard",
+});
+
+let data = [];
+
+const config = useRuntimeConfig();
+
+const fetchData = async () => {
+  try {
+    const res = await fetch(
+      `${config.public.apiURL}/subject?page=&limit=&name=&sortby=&order=`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMTI3YzE3YS0yMWU5LTQ0YzktOGE1Yi1hNjJjYzJjMzJjNDQiLCJ1c2VybmFtZSI6ImFkbWluIiwibmFtZSI6IlN1cGVyIEFkbWluIiwiaWF0IjoxNzA0MzYxODY5LCJleHAiOjE3MDQ0NDgyNjl9.owD8mX-ilwb6_pWP9L0FXcYw-DaeTWrmtqPZonLVMX0`,
+        },
+      }
+    );
+
+    const resData = await res.json();
+    data = resData.data;
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+onMounted(() => {
+  fetchData();
+});
 </script>
-
-<style>
-@import "animate.css";
-
-/* Add animation classes to elements */
-h1 {
-  animation: fadeInDown 1s;
-}
-
-p {
-  animation: fadeInUp 1s;
-}
-
-button {
-  animation: bounceIn 1s;
-}
-</style>
